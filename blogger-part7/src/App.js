@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
+import './App.css'
 import Blog from './components/Blog'
 import User from './components/User'
 import Notification from './components/Notification'
@@ -7,7 +8,7 @@ import Togglable from './components/Togglable'
 import Users from './components/Users'
 import Blogs from './components/Blogs'
 
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
+import { BrowserRouter as Router, Switch, Link, Route } from "react-router-dom"
 
 import blogService from './services/blogs'
 import loginService from './services/login'
@@ -135,6 +136,7 @@ const App = () => {
   if (user === null) {
     return(
       <div>
+        
         <Notification message={Message} isError={ErrorMessage}/>
         {loginForm()}
       </div>
@@ -144,7 +146,11 @@ const App = () => {
 
     <Router>
     <div>
+      <div className="nav">
+      <Link to="/users">users</Link>  
+      <Link to="/blogs">blogs</Link>      
       <Notification message={Message} isError = {ErrorMessage}/>
+    </div>
       <p>{user.name} is logged in</p>
       <button onClick={() => handleLogout()}>
           logout
@@ -161,7 +167,7 @@ const App = () => {
 
       <Route path = "/blogs/:id">
         <div>
-          <Blogs blogs={blogs}/>
+          <Blogs blogs={blogs} setblog={setBlogs} user={user}/>
         </div>
       </Route>
 

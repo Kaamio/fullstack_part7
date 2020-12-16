@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React from 'react'
 import blogService from '../services/blogs'
 import PropTypes from 'prop-types'
 import { BrowserRouter as Router, Link } from "react-router-dom"
@@ -18,23 +18,7 @@ const Blog = ({ blog, setblog, user, setMessage }) => {
     color: 'red'
   }
 
-  const [details, setDetails]  = useState(false)
 
-  const hideWhenVisible = { display: details ? 'none' : '' }
-  const showWhenVisible = { display: details ? '' : 'none' }
- 
-  const showIfLoggedIn = { display: (user.username === blog.user.username) ? '' : 'none' }
-
-  const toggleDetails = () => {
-    setDetails(!details)
-  }
-
-  const registerLike = async () => {
-    const likedBlog = await blogService.putLike(blog)
-    blog.likes = likedBlog
-    const updatedBlogs = await blogService.getAll()
-    setblog(updatedBlogs)
-  }
 
   const removeBlog = async () => {
     await blogService.remove(blog)
@@ -50,27 +34,14 @@ const Blog = ({ blog, setblog, user, setMessage }) => {
 
   return (
     <div style = {blogStyle}>
-      <div style={hideWhenVisible} className = 'blogShort'>
+      <div>
         <p>
-          <Link to={`blogs/${blog.id}`}>{blog.title} - {blog.author}</Link>  <button id='show' onClick={toggleDetails}>show</button>
+          <Link to={`blogs/${blog.id}`}>{blog.title} - {blog.author}</Link> 
         </p>
+        <button style={buttonStyle} onClick={removeBlog}>remove</button>
       </div>
-
-      <div style={showWhenVisible} className = 'blogLong'>
-        <p>
-          {blog.title} - {blog.author} <button onClick={toggleDetails}>hide</button>  <br />
-          {blog.url}<br />
-          likes: {blog.likes}<button id="like_button" onClick={registerLike}>like</button><br />
-          {blog.user.username}
-        </p>
-        <div style={showIfLoggedIn}>
-          <button style={buttonStyle} onClick={removeBlog}>remove</button>
-        </div>
-      </div>
-
-
-    </div>
-  )
+     </div>     
+     )
 }
 
 Blog.propTypes = {
